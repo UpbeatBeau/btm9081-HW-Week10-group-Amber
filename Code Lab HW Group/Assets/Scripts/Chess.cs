@@ -155,7 +155,7 @@ public class Chess : MonoBehaviour
     {
         return FiveInARow() == 2;
     }
-    
+
     
     private int FiveInARow (){
         for ( var x = 0; x < width; x++)
@@ -177,7 +177,7 @@ public class Chess : MonoBehaviour
                         grid[x, y] == grid[x + 3, y + 3] && grid[x, y] == grid[x + 4, y + 4])
                         return grid[x, y];
                     
-                if(x >= width - 5 && y <= height - 5)
+                if(x >= width - 2 && y <= height - 5)
                     if (grid[x, y] != 0 && grid[x, y] == grid[x - 1, y + 1] && grid[x, y] == grid[x - 2, y + 2] &&
                         grid[x, y] == grid[x - 3, y + 3] && grid[x, y] == grid[x - 4, y + 4])
                         return grid[x, y];
