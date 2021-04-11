@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Chess : MonoBehaviour
 {
@@ -12,8 +14,10 @@ public class Chess : MonoBehaviour
 
     private float offsetX = 3;
     private float offsetY = 3;
-    
+
     private int[,] grid;
+
+    public Text display;
 
     // player 1 and 2 take turns to place the chess piece
     private bool blackTurn = false;
@@ -21,11 +25,11 @@ public class Chess : MonoBehaviour
     private List<GameObject> spawnedPieces = new List<GameObject>();
 
     public GameObject blackPrefab, whitePrefab;
-    
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
         // initialize an empty 2D array with no chess pieces
         grid = new int[width, height];
 
@@ -48,7 +52,7 @@ public class Chess : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-        
+
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
 
@@ -56,7 +60,7 @@ public class Chess : MonoBehaviour
             Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
 
             Debug.Log(worldPoint);
-            
+
             // round the position of the cursor into integers
             int gridX = Convert.ToInt32(Math.Round(worldPoint.x)) + Convert.ToInt32(offsetX);
             int gridY = Convert.ToInt32(Math.Round(worldPoint.y)) + Convert.ToInt32(offsetY);
@@ -65,6 +69,8 @@ public class Chess : MonoBehaviour
             if (gridX >= 0 && gridX < 7 && gridY >= 0 && gridY < 7 && grid[gridX, gridY] == 0)
             {
                 // place a chess piece according to the turn
+                if (BlackWin() || WhiteWin()) return;
+                
                 if (blackTurn)
                 {
                     grid[gridX, gridY] = 1;
@@ -77,7 +83,7 @@ public class Chess : MonoBehaviour
                 }
 
                 Debug.Log(grid[gridX, gridY]);
-                
+
                 UpdateDisplay();
             }
         }
@@ -94,7 +100,7 @@ public class Chess : MonoBehaviour
     {
         return grid[x, y] == 2;
     }
-    
+
     private void UpdateDisplay()
     {
         foreach (var piece in spawnedPieces)
@@ -123,9 +129,61 @@ public class Chess : MonoBehaviour
                 }
             }
         }
+
+        if (BlackWin())
+        {
+            display.text = "Black Wins!";
+            display.color = Color.black;
+        }
+        else if (WhiteWin())
+        {
+            display.text = "White Wins!";
+            display.color = Color.white;
+        }
+        else
+        {
+            display.text = "";
+        }
+    }
+    
+    public bool BlackWin()
+    {
+        return FiveInARow() == 1;
+    }
+
+    public bool WhiteWin()
+    {
+        return FiveInARow() == 2;
     }
     
     
-    
-    
+    private int FiveInARow (){
+        for ( var x = 0; x < width; x++)
+        {
+            for (var y = 0; y < height; y++)
+            {
+                if(y <= height - 5)
+                    if (grid[x, y] != 0 && grid[x, y] == grid[x, y + 1] && grid[x, y] == grid[x, y + 2] &&
+                        grid[x, y] == grid[x, y + 3] && grid[x, y] == grid[x, y + 4])
+                        return grid[x, y];
+                
+                if(x <= width - 5)
+                    if (grid[x, y] != 0 && grid[x, y] == grid[x + 1, y] && grid[x, y] == grid[x + 2, y] &&
+                        grid[x, y] == grid[x + 3, y] && grid[x, y] == grid[x + 4, y])
+                        return grid[x, y];
+                
+                if(x <= width - 5 && y <= height - 5)
+                    if (grid[x, y] != 0 && grid[x, y] == grid[x + 1, y + 1] && grid[x, y] == grid[x + 2, y + 2] &&
+                        grid[x, y] == grid[x + 3, y + 3] && grid[x, y] == grid[x + 4, y + 4])
+                        return grid[x, y];
+                    
+                if(x >= width - 5 && y <= height - 5)
+                    if (grid[x, y] != 0 && grid[x, y] == grid[x - 1, y + 1] && grid[x, y] == grid[x - 2, y + 2] &&
+                        grid[x, y] == grid[x - 3, y + 3] && grid[x, y] == grid[x - 4, y + 4])
+                        return grid[x, y];
+            }
+        }
+
+        return 0;
+    }
 }

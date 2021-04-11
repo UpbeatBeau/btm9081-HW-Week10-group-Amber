@@ -1,0 +1,13 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/modules.xml
+/contentModel.xml
+/projectSettingsUpdater.xml
+/.idea.Code Lab HW Group.iml
+# Datasource local storage ignored files
+/../../../../../../../../../../../:\Users\beaum\Documents\Codelab1\Week10-HW\btm9081-HW-Week10-group-Amber\Code Lab HW Group\.idea\.idea.Code Lab HW Group\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
