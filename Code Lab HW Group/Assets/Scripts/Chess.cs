@@ -68,9 +68,10 @@ public class Chess : MonoBehaviour
             // if the position is on the chess board and there is no chess piece in the grid
             if (gridX >= 0 && gridX < 7 && gridY >= 0 && gridY < 7 && grid[gridX, gridY] == 0)
             {
-                // place a chess piece according to the turn
+                //if someone has won dont place pieces
                 if (BlackWin() || WhiteWin()) return;
                 
+                // place a chess piece according to the turn
                 if (blackTurn)
                 {
                     grid[gridX, gridY] = 1;
@@ -82,7 +83,7 @@ public class Chess : MonoBehaviour
                     blackTurn = true;
                 }
 
-                Debug.Log(grid[gridX, gridY]);
+                //Debug.Log(grid[gridX, gridY]);
 
                 UpdateDisplay();
             }
@@ -103,6 +104,7 @@ public class Chess : MonoBehaviour
 
     private void UpdateDisplay()
     {
+        //Destroy and recreated the spawned pieces so that the board can update
         foreach (var piece in spawnedPieces)
         {
             Destroy(piece);
@@ -130,60 +132,75 @@ public class Chess : MonoBehaviour
             }
         }
 
+        //display the winner as Black
         if (BlackWin())
         {
             display.text = "Black Wins!";
             display.color = Color.black;
         }
+        //display the winner as White
         else if (WhiteWin())
         {
             display.text = "White Wins!";
             display.color = Color.white;
         }
+        //display nothing
         else
         {
             display.text = "";
         }
     }
     
+    //black wins
     public bool BlackWin()
     {
         return FiveInARow() == 1;
     }
 
+    //white wins
     public bool WhiteWin()
     {
         return FiveInARow() == 2;
     }
 
     
+    //this integer checks in you have five pieces of the same color in a row. checking each array location seperately
     private int FiveInARow (){
         for ( var x = 0; x < width; x++)
         {
             for (var y = 0; y < height; y++)
             {
+                //as long as the node is at least 5 away from the top of the board
                 if(y <= height - 5)
+                    //check if all 5 vertical pieces are the same
                     if (grid[x, y] != 0 && grid[x, y] == grid[x, y + 1] && grid[x, y] == grid[x, y + 2] &&
                         grid[x, y] == grid[x, y + 3] && grid[x, y] == grid[x, y + 4])
                         return grid[x, y];
                 
+                //as long as the node is at least 5 away from the far right side
                 if(x <= width - 5)
+                    //check if all 5 horizontal pieces are the same
                     if (grid[x, y] != 0 && grid[x, y] == grid[x + 1, y] && grid[x, y] == grid[x + 2, y] &&
                         grid[x, y] == grid[x + 3, y] && grid[x, y] == grid[x + 4, y])
                         return grid[x, y];
                 
+                //as long as the node is both 5 away from the top and right
                 if(x <= width - 5 && y <= height - 5)
+                    //check if the upward right diagonal is equal
                     if (grid[x, y] != 0 && grid[x, y] == grid[x + 1, y + 1] && grid[x, y] == grid[x + 2, y + 2] &&
                         grid[x, y] == grid[x + 3, y + 3] && grid[x, y] == grid[x + 4, y + 4])
                         return grid[x, y];
                     
+                //as long as the node is both 5 away from the top and left
                 if(x >= width - 2 && y <= height - 5)
+                    //check if the upward left diagonal is all the same
                     if (grid[x, y] != 0 && grid[x, y] == grid[x - 1, y + 1] && grid[x, y] == grid[x - 2, y + 2] &&
                         grid[x, y] == grid[x - 3, y + 3] && grid[x, y] == grid[x - 4, y + 4])
                         return grid[x, y];
             }
         }
 
+        //return 0 if none of them work
         return 0;
     }
 }

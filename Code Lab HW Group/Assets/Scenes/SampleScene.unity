@@ -539,7 +539,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: 'White starts
+
+'
 --- !u!222 &1488352675
 CanvasRenderer:
   m_ObjectHideFlags: 0
